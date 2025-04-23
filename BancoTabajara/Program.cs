@@ -24,6 +24,10 @@
             conta1.transferirPara(conta2, 501);
             conta2.ConsultarSaldo();
 
+            conta1.ExibirExtrato();
+
+            conta2.ExibirExtrato();
+
             Console.ReadLine();
         }
     }

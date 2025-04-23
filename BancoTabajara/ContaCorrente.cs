@@ -38,11 +38,12 @@ namespace BancoTabajara
         public void Depositar(double valor)
         {
             saldo += valor;
+            RegistrarMovimentacao(new Movimentacao(valor, "Crédito"));
         }
 
         public void ConsultarSaldo()
         {
-            Console.WriteLine($"Saldo atual: R$ {saldo}");
+            Console.WriteLine($"Saldo atual: R$ {saldo:F2}");
         }
 
         public void transferirPara(ContaCorrente destino, int valor)
@@ -52,7 +53,14 @@ namespace BancoTabajara
 
             this.Sacar(valor);
             destino.Depositar(valor);
-            Console.WriteLine($"Transferência de R${valor} realizada para a conta {destino.numero}.");
+            Console.WriteLine($"Transferência de R$ {valor:F2} realizada para a conta {destino.numero}.");
+        }
+
+        public void ExibirExtrato()
+        {
+            Console.WriteLine($"Extrato da conta {numero}");
+            for (int m = 0; m < contadorMovimentacoes; m++)
+                Console.WriteLine($"{movimentacoes[m].Tipo}: R$ {movimentacoes[m].Valor:F2}");
         }
     }
 }
