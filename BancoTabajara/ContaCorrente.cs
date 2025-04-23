@@ -18,5 +18,6 @@
         {
             saldo += valor;
         }
+        public void ConsultarSaldo
     }
 }
