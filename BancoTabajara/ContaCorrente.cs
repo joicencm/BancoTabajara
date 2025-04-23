@@ -6,11 +6,17 @@
         public double saldo;
         public double limite;
 
-        public double Sacar(double valor)
+        public void Sacar(double valor)
         {
+            if (valor > saldo + limite)
+                Console.WriteLine("Saldo insulficiente");
+
             saldo -= valor;
-            Console.WriteLine($"Saque de R${valor} realizado com sucesso. Saldo atual de R$ {saldo}");
-            return valor;
+        }
+
+        public void Depositar(double valor)
+        {
+            saldo += valor;
         }
     }
 }
