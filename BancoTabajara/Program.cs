@@ -14,6 +14,9 @@
             conta1.Sacar(300);
             conta1.Depositar(500);
             conta1.ConsultarSaldo();
+            conta1.ExibirExtrato();
+
+            Console.WriteLine();
 
             ContaCorrente conta2 = new ContaCorrente();
             conta2.saldo = 1500;
@@ -21,10 +24,8 @@
             conta2.limite = 0;
             conta2.movimentacoes = new Movimentacao[10];
 
-            conta1.transferirPara(conta2, 501);
-            conta2.ConsultarSaldo();
-
-            conta1.ExibirExtrato();
+            conta1.transferirPara(conta2, 4000);
+            conta2.ConsultarSaldo();         
 
             conta2.ExibirExtrato();
 

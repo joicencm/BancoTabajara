@@ -1,66 +1,74 @@
 ﻿
 namespace BancoTabajara
 {
-    public class Movimentacao
-    {
-        public double Valor;
-        public string Tipo;
-
-        public Movimentacao(double valor, string tipo)
-        {
-            Valor = valor;
-            Tipo = tipo;
-        }
-    }
 
     public class ContaCorrente
     {
         public int numero;
-        public double saldo;
-        public double limite;
+        public decimal saldo;
+        public decimal limite;
         public Movimentacao[] movimentacoes;
         public int contadorMovimentacoes = 0;
 
-        public void Sacar(double valor)
+        public void Sacar(decimal quantia)
         {
-            if (valor > saldo + limite)
-                Console.WriteLine("Saldo insulficiente");
 
-            saldo -= valor;
-            RegistrarMovimentacao(new Movimentacao(valor, "Débito"));
+            if (quantia <= saldo + limite)
+            {
+            saldo -= quantia;
+                Movimentacao novaMovimentacao = new Movimentacao();
+                novaMovimentacao.valor = quantia;
+                novaMovimentacao.tipo = "Débito";
+
+                movimentacoes[contadorMovimentacoes] = novaMovimentacao;
+                contadorMovimentacoes++;
+            }
+            else
+                Console.WriteLine($"Transação no valor de {quantia.ToString("C2")} não foi efetuada. Saldo insulficiente, ou ultrapassou o limite");
         }
 
-        public void RegistrarMovimentacao(Movimentacao movimentacao)
+        public void Depositar(decimal quantia)
         {
-            movimentacoes[contadorMovimentacoes++] = movimentacao;
-        }
+            saldo += quantia;
+            Movimentacao novaMovimentacao = new Movimentacao();
+            novaMovimentacao.valor = quantia;
+            novaMovimentacao.tipo = "Crédito";
 
-        public void Depositar(double valor)
-        {
-            saldo += valor;
-            RegistrarMovimentacao(new Movimentacao(valor, "Crédito"));
+            movimentacoes[contadorMovimentacoes] = novaMovimentacao;
+            contadorMovimentacoes++;
         }
 
         public void ConsultarSaldo()
         {
-            Console.WriteLine($"Saldo atual: R$ {saldo:F2}");
+            Console.WriteLine($"Saldo atual: {saldo.ToString("C2")}");
         }
 
-        public void transferirPara(ContaCorrente destino, int valor)
+        public void transferirPara(ContaCorrente destino, int quantia)
         {
-            if (valor > saldo + limite)
-                Console.WriteLine("Saldo insulficiente, ou ultrapassou o limite");
-
-            this.Sacar(valor);
-            destino.Depositar(valor);
-            Console.WriteLine($"Transferência de R$ {valor:F2} realizada para a conta {destino.numero}.");
+            if (quantia <= saldo + limite)
+            {
+            this.Sacar(quantia);
+            destino.Depositar(quantia);
+            Console.WriteLine($"Transferência de {quantia.ToString("C2")} realizada para a conta {destino.numero}.");
+            }
+            else
+                Console.WriteLine($"Transação no valor de {quantia.ToString("C2")} não foi  efetuada. Saldo insulficiente, ou ultrapassou o limite");
         }
 
-        public void ExibirExtrato()
+        public void ExibirExtrato()             
         {
-            Console.WriteLine($"Extrato da conta {numero}");
-            for (int m = 0; m < contadorMovimentacoes; m++)
-                Console.WriteLine($"{movimentacoes[m].Tipo}: R$ {movimentacoes[m].Valor:F2}");
+            Console.WriteLine("Extrato da conta " + this.numero);
+            Console.WriteLine("Saldo: " + this.saldo.ToString("C2"));
+
+            Console.WriteLine();
+
+            for (int m = 0; m < movimentacoes.Length; m++)
+            {
+                Movimentacao movimentacaoAtual = movimentacoes[m];
+                if (movimentacaoAtual != null)
+                    Console.WriteLine(movimentacaoAtual.ExbirMovimentacao());
+
+            }
         }
     }
 }
